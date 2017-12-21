@@ -1,0 +1,83 @@
+{% if settings.notification_slider_use and settings.notification_slider_collection != blank %}
+{{ 'jquery.notify.min.js' | asset_url | script_tag }}
+{% assign notifyCollection = collections[settings.notification_slider_collection] %}
+<script type="text/javascript">
+  var aNotify = [];
+  $(document).ready( function() {
+    var index = 0;
+    
+    {% for nprod in notifyCollection.products %}
+    {% assign variant_tmp = nprod.selected_or_first_available_variant  %}
+    {% for variant in nprod.variants %}
+    {% if variant.available == true and variant.price < variant_tmp.price %}
+    {% assign variant_tmp = variant %}	
+    {% endif %}
+    {% endfor %}
+    $.notify.addStyle('notifStyle' + index, {
+      html:
+        '<div>' +
+          '<div class="col-row">' +
+            '<div class="col-left">' +
+              '<a href="{{ nprod.url | within: collection }}" title="{{ nprod.featured_image.alt | escape }}">' +
+                '<img src="{{ nprod.featured_image | product_img_url: 'small' }}" alt="{{ nprod.featured_image.alt | escape }}" />' +
+              '</a>' +
+            '</div>' +
+            '<div class="col-right">' +
+              '<div class="product">' +
+                '<h5>{{ settings.notification_slider_header | replace: '"', '\"' }}</h5>' +
+                '<h4><a href="{{ nprod.url | within: collection }}" title="{{ nprod.featured_image.alt | escape }}"><span data-notify-html="title"/></a></h4>' +
+                '<div class="product-price">' +
+                {% if nprod.available %}
+                  "<span class='price'>{{ variant_tmp.price | money }}</span>" +
+      			  {% if variant_tmp.compare_at_price > variant_tmp.price %}
+                    "<del class='price_compare'> {{ variant_tmp.compare_at_price | money }}</del>" +
+                  {% endif %}
+                {% else %}
+                    '<span class="sold_out">{{'products.product.sold_out' | t}}</span>' +
+                {% endif %}
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div',
+      classes: {      
+      base: {
+      'opacity': '1',
+      'width': '320px',
+      'background': '{{settings.b_scaffolding_bg}}',
+      'padding': '0'
+    }
+                      }
+                      });
+     aNotify[index] = {
+       sStyle: 'notifStyle' + index,
+       title: "{{ nprod.title | replace: '"', '&quot;' }}",
+       button: 'Check it now!'
+     };
+     index += 1;
+     {% endfor %}
+     
+     {% if notifyCollection.all_products_count > 0 %}
+     var notifySliderDelay = {{ settings.notification_slider_delay | plus:3000 }};
+      
+      setInterval(function() {
+        var randChoose = aNotify[Math.round(Math.random() * (aNotify.length - 1))];    
+        $.notify({
+          title: randChoose.title,
+          button: randChoose.button
+        }, { 
+          style: randChoose.sStyle,
+          autoHide: true,
+          autoHideDelay: {{ settings.notification_slider_delay }},
+          clickToHide: false,
+          globalPosition: 'bottom left',
+          hideAnimation: 'fadeOut',
+          showAnimation: 'fadeIn',
+          showDuration:1000,
+          hideDuration:1000      
+        });  
+      }, notifySliderDelay);
+      {% endif %}   
+      });   
+</script>
+{% endif %}

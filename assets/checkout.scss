@@ -1,0 +1,26 @@
+
+@import url(//fonts.googleapis.com/css?family=Lato:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=cyrillic-ext,greek-ext,latin,latin-ext,cyrillic,greek,vietnamese);
+
+
+@import url(//fonts.googleapis.com/css?family=Roboto:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=cyrillic-ext,greek-ext,latin,latin-ext,cyrillic,greek,vietnamese);
+
+
+
+
+
+
+
+
+
+
+body{
+  font-family: "Roboto", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, .btn, .product__info__name, .product__price, .total-line__price{
+  font-family: "Lato", sans-serif;
+}
+
+.shop__logo{
+  max-width: 100%;
+}

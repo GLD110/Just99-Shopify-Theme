@@ -1,0 +1,77 @@
+{% if currencies-switcher == 'dropdown' %}
+<span class="title">Currencies:</span>
+<div class="currency dropdown-parent">
+  <a class="currency_wrapper dropdown-toggle" href="javascript:;" data-toggle="dropdown">
+    <i class="sub-dropdown1"></i>
+    <i class="sub-dropdown"></i>
+    
+    <span class="currency_code"><i class="flag-{{shop.currency|downcase}}"></i>{{ shop.currency }}</span>
+    <i class="icomoon-arrow-down"></i>
+  </a>
+  <ul class="currencies dropdown-menu text-left">
+    {% capture codes %},USD,EUR,GBP,CAD,ARS,AUD,BBD,BDT,BSD,BHD,BRL,BOB,BND,BGN,MMK,KYD,CLP,CNY,COP,CRC,HRK,CZK,DKK,DOP,XCD,EGP,XPF,FJD,GHS,GTQ,GYD,GEL,HKD,HUF,ISK,INR,IDR,NIS,JMD,JPY,JOD,KZT,KES,KWD,LVL,LTL,MXN,MYR,MUR,MDL,MAD,MNT,MZN,ANG,NZD,NGN,NOK,OMR,PKR,PYG,PEN,PHP,PLN,QAR,RON,RUB,SAR,RSD,SCR,SGD,SYP,ZAR,KRW,LKR,SEK,CHF,TWD,THB,TZS,TTD,TRY,UAH,AED,UYU,VEB,VND,ZMK,{% endcapture %}
+    {% assign supported_codes = settings.supported_currencies | split: ' ' %}
+    <li class="currency-{{shop.currency}} active">
+      <a href="javascript:;"><i class="flag-{{shop.currency|downcase}}"></i>{{ shop.currency }}</a>
+      <input type="hidden" value="{{ shop.currency }}" />
+    </li>
+    {% for code in supported_codes %}
+    {% if code != shop.currency and codes contains code %}
+    <li class="currency-{{code}}">
+      <a href="javascript:;"><i class="flag-{{code|downcase}}"></i>{{ code }}</a>
+      <input type="hidden" value="{{ code }}" />
+    </li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+  
+  <select class="currencies_src hide" name="currencies">
+    {% capture codes %},USD,EUR,GBP,CAD,ARS,AUD,BBD,BDT,BSD,BHD,BRL,BOB,BND,BGN,MMK,KYD,CLP,CNY,COP,CRC,HRK,CZK,DKK,DOP,XCD,EGP,XPF,FJD,GHS,GTQ,GYD,GEL,HKD,HUF,ISK,INR,IDR,NIS,JMD,JPY,JOD,KZT,KES,KWD,LVL,LTL,MXN,MYR,MUR,MDL,MAD,MNT,MZN,ANG,NZD,NGN,NOK,OMR,PKR,PYG,PEN,PHP,PLN,QAR,RON,RUB,SAR,RSD,SCR,SGD,SYP,ZAR,KRW,LKR,SEK,CHF,TWD,THB,TZS,TTD,TRY,UAH,AED,UYU,VEB,VND,ZMK,{% endcapture %}
+    {% assign supported_codes = settings.supported_currencies | split: ' ' %}
+    <option value="{{ shop.currency }}" selected="selected"><i class="flag-{{shop.currency|downcase}}"></i>{{ shop.currency }}</option>
+    {% for code in supported_codes %}
+    {% if code != shop.currency and codes contains code %}
+    <option value="{{ code }}"><i class="flag-{{shop.currency|downcase}}"></i>{{ code }} sss</option>
+    {% endif %}
+    {% endfor %}
+  </select>
+</div>
+{% endif %}
+
+{% if currencies-switcher == 'plain' %}
+<div class="currency-plain">
+  <ul class="currencies inline unmargin">
+    {% if settings.currency_heading != blank %}
+    <li class="heading">
+      {{settings.currency_heading}}
+    </li>
+    {% endif %}
+    
+    {% capture codes %},USD,EUR,GBP,CAD,ARS,AUD,BBD,BDT,BSD,BHD,BRL,BOB,BND,BGN,MMK,KYD,CLP,CNY,COP,CRC,HRK,CZK,DKK,DOP,XCD,EGP,XPF,FJD,GHS,GTQ,GYD,GEL,HKD,HUF,ISK,INR,IDR,NIS,JMD,JPY,JOD,KZT,KES,KWD,LVL,LTL,MXN,MYR,MUR,MDL,MAD,MNT,MZN,ANG,NZD,NGN,NOK,OMR,PKR,PYG,PEN,PHP,PLN,QAR,RON,RUB,SAR,RSD,SCR,SGD,SYP,ZAR,KRW,LKR,SEK,CHF,TWD,THB,TZS,TTD,TRY,UAH,AED,UYU,VEB,VND,ZMK,{% endcapture %}
+    {% assign supported_codes = settings.supported_currencies | split: ' ' %}
+    <li class="currency-{{shop.currency}} active">
+      <a href="javascript:;">{{ shop.currency }}</a>
+      <input type="hidden" value="{{ shop.currency }}" />
+    </li>
+    {% for code in supported_codes %}
+    {% if code != shop.currency and codes contains code %}
+    <li class="currency-{{code}}">
+      <a href="javascript:;">{{ code }}</a>
+      <input type="hidden" value="{{ code }}" />
+    </li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+  
+  <select class="currencies_src hide" name="currencies">
+    {% capture codes %},USD,EUR,GBP,CAD,ARS,AUD,BBD,BDT,BSD,BHD,BRL,BOB,BND,BGN,MMK,KYD,CLP,CNY,COP,CRC,HRK,CZK,DKK,DOP,XCD,EGP,XPF,FJD,GHS,GTQ,GYD,GEL,HKD,HUF,ISK,INR,IDR,NIS,JMD,JPY,JOD,KZT,KES,KWD,LVL,LTL,MXN,MYR,MUR,MDL,MAD,MNT,MZN,ANG,NZD,NGN,NOK,OMR,PKR,PYG,PEN,PHP,PLN,QAR,RON,RUB,SAR,RSD,SCR,SGD,SYP,ZAR,KRW,LKR,SEK,CHF,TWD,THB,TZS,TTD,TRY,UAH,AED,UYU,VEB,VND,ZMK,{% endcapture %}
+    {% assign supported_codes = settings.supported_currencies | split: ' ' %}
+    <option value="{{ shop.currency }}" selected="selected">{{ shop.currency }}</option>
+    {% for code in supported_codes %}
+    {% if code != shop.currency and codes contains code %}
+    <option value="{{ code }}">{{ code }}</option>
+    {% endif %}
+    {% endfor %}
+  </select>
+</div>
+{% endif %}

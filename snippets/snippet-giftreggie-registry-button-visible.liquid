@@ -1,0 +1,101 @@
+<div class="gift-reggie-button"></div>
+{% unless giftreggie_registry_button %}
+<script type='text/javascript'>
+(function ($) {
+	var getCookieFunction = function(c_name) {
+		var c_value = document.cookie;
+		var c_start = c_value.indexOf(" " + c_name + "=");
+		if (c_start == -1)
+			c_start = c_value.indexOf(c_name + "=");
+		if (c_start == -1)
+			return null;
+		c_start = c_value.indexOf("=", c_start) + 1;
+		var c_end = c_value.indexOf(";", c_start);
+		if (c_end == -1)
+			c_end = c_value.length;
+		return unescape(c_value.substring(c_start,c_end));
+	};
+	var clearCookieFunction = function(c_name) {
+		document.cookie = c_name + '=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+	}
+	var sessionId = getCookieFunction("giftreggie_session_cookie");
+	{% unless customer %}
+		if (sessionId) {
+			sessionId = null;
+			$.ajax({ url: '/cart/update.js', type: "POST", data: {
+				'attributes[registry_admin]': '',
+				'attributes[registry_id]': '',
+			} }).done(function() {
+				clearCookieFunction("giftreggie_session_cookie");
+			});
+		}
+	{% endunless %}
+	
+	var publishButton = function(div) {
+		var form = $(div).parents("form");
+		var currentLanguage = "{{ shop.metafields.language_codes[cart.attributes['language']] }}";
+		var languageParam = currentLanguage != "" ? "&lang=" + encodeURIComponent(currentLanguage) : "";
+		var languageInitialParam = languageParam != "" ? languageParam.replace("&", "?") : "";
+		var defaultLanguage = "en";
+		var buttonNames = {
+			"en": "Add to Registry",
+			"fr": "Ajoutez au Liste"
+		};
+		var value = buttonNames[currentLanguage] ? buttonNames[currentLanguage] : buttonNames[defaultLanguage];
+		if (form.length > 0 && /cart/.test(form.attr('action'))) {
+			$("<input type='submit' class='btn' value='" + value + "'>").appendTo(div).click(function() {
+				{% if cart.attributes['registry_id'] and cart.attributes['registry_admin'] and customer %}
+					var id = form.find("input[name='id'], select[name='id']").val();
+					var quantity = form.find("input[name='quantity']").val();
+					var properties = {};
+					form.find("input, select").each(function() {
+						if (!$(this).is(':disabled')) {
+							if (($(this).attr('type') == 'checkbox' || $(this).attr('type') == 'radio') && !$(this).is(':checked'))
+								return;
+							var groups = /properties\[([^\]]+)\]/.exec($(this).attr('name'));
+							if (groups && groups.length > 1) {
+								properties[groups[1]] = $(this).val();
+							}
+						}
+					});
+					if (!quantity)
+						quantity = 1;
+					// We add to the DOM in this manner to deal with IE issues.
+					if (id) {
+						var property_attributes = "";
+						for (var i in properties) {
+							if (properties.hasOwnProperty(i)) {
+								property_attributes += '<input type="hidden" name="properties[' + i + ']" value="' + (properties[i] != null ? properties[i].replace(/"/g, "&quot;") : "") + '"/>';
+							}
+						}
+						$('<form style="display:none" method="post" action="/apps/giftregistry/registry/{{ cart.attributes.registry_id }}/add?sid=' + encodeURIComponent(sessionId) + languageParam + '">' + property_attributes + '<input type="hidden" name="id" value="' + id + '"><input type="hidden" name="quantity" value="' + quantity + '"></form>').appendTo("body").submit();
+					}
+					else {
+						alert("Unable to integrate this snippet properly with your theme. Please remove or modify it to comply with your theme. For help modifying the snippet, please contact gift-reggie@eshopadmin.com.");
+					}
+				{% else %}
+					{% if customer %}
+						if (sessionId)
+							window.location = "/apps/giftregistry/create?sid=" + encodeURIComponent(sessionId) + languageParam;
+						else
+							window.location = "/apps/giftregistry/create" + languageInitialParam;
+					{% else %}
+						window.location = "/apps/giftregistry/signup" + languageInitialParam;
+					{% endif %}
+				{% endif %}
+				return false;
+			});
+		}
+		else {
+			alert("Unable to integrate this snippet properly with your theme. Please remove or modify it to comply with your theme. For help modifying the snippet, please contact gift-reggie@eshopadmin.com.");
+		}
+		return false;
+	};
+
+	$(document).ready(function() {
+		$(".gift-reggie-button").each(function() { publishButton($(this)); });
+	});
+})(jQuery);
+</script>
+{% assign giftreggie_registry_button = 1 %}
+{% endunless %}

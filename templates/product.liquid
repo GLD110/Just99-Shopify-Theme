@@ -1,0 +1,291 @@
+{% assign variant_tmp = product.selected_or_first_available_variant | default: product.variants.first %}
+<div id="col-main">
+  <div class="col-md-10" itemscope itemtype="http://schema.org/Product">
+    <meta itemprop="url" content="{{ shop.url }}{{ product.url }}" />
+    <div id="product" class="row clearfix">
+      <div class="product-gallery col-sm-6">
+        <div class="inner">
+          <div class="thumbnails">
+            {% for image in product.images %}
+            <a class="thumbnail" href="{{ image | product_img_url:'master' }}" data-src="{{image | product_img_url:'grande'}}"><img src="{{ image | product_img_url:'small' }}" alt="{{product.title}}" /></a>
+            {% endfor %}
+          </div>
+
+          {% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
+          <div class="main">
+            <div class="main-img-link" href="{{featured_image | product_img_url:'master'}}" title="{{product.title}}">
+              <img itemprop="image" class="main-img" src="{{product.featured_image | product_img_url:'grande'}}" alt="{{product.title}}" />
+              {% include 'spinner' %}
+            </div>
+          </div>
+
+          <div class="gallery-icon">
+            <i class="fa fa-expand"></i>
+          </div>
+          <script>
+            jQuery(document).ready(function(){
+              jQuery('.gallery-icon').on('click', function(){
+                var gallery = [];
+                {% for image in product.images %}
+                gallery.push('{{ image | product_img_url: 'original' }}');
+                             {% endfor %}
+                             roar.showThemeGallery(gallery, jQuery(this));
+                return false;
+              });
+            });
+          </script>
+        </div>
+      </div>
+
+      <div class="product-sidebar col-sm-6">
+        <div class="product_item">
+          <div class="inner">
+            {% include 'product-breadcrumb' %}
+            <div class="product-title">
+              <h1 itemprop="name" content="{{ product.title }}">{{ product.title }}</h1>
+              {% if settings.product_sku_show %}
+              <div id="sku"{% unless variant_tmp and variant_tmp.sku %} class="hidden"{% endunless %}>{{'products.product.sku' | t}} <span>{{variant_tmp.sku}}</span></div>
+              {% endif %}
+            </div>
+
+            {% if settings.reviews_enable %}
+            <a class="smoothscroll" href="#product-reviews-a">
+              <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+            </a>
+            {% endif %}
+
+            <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+              <meta itemprop="priceCurrency" content="{{ shop.currency }}" />
+
+              {% if product.available %}
+              <link itemprop="availability" href="http://schema.org/InStock" />
+              {% else %}
+              <link itemprop="availability" href="http://schema.org/OutOfStock" />
+              {% endif %}
+
+              <div class="product-price">
+                <div id="purchase" class="detail-price" itemprop="price">
+                  {% if variant_tmp.compare_at_price > variant_tmp.price %}
+                  <del class="price_compare"> {{ variant_tmp.compare_at_price | money }}</del>
+                  <span class="price_percentage">-{{ variant_tmp.compare_at_price | minus: variant_tmp.price | times: 100.0 | divided_by: variant_tmp.compare_at_price | money_without_currency | times: 100 | remove: '.0'}}%</span>
+                  {% endif %}
+                  <div class="price">{{ variant_tmp.price | money }}</div>
+                </div>
+              </div>
+
+              <div class="sharing-btn">
+                <span>{{'products.product.share' | t}}</span>
+                {% include 'social-sharing' %}
+              </div>
+
+              {% if product.available %}
+              <form class="product-form" id="product-form" action="/cart/add" method="post" enctype="multipart/form-data" data-product-id="{{product.id}}">
+                <div id="product-variants">
+                  <select id="product-select" name="id" style="display: none;">
+                    {% for variant in product.variants %}
+                    {% if variant.available %}
+                    <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money_with_currency }}</option>
+                    {% else %}
+                    <option disabled="disabled">
+                      {{ variant.title }} - {{'products.product.sold_out' | t}}
+                    </option>
+                    {% endif %}
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <!--<div class="limited-edition-group">
+                  {% include 'limited-edition' %}
+                </div>-->
+                
+                <!-------------------  Start Countdown Timer ------------------->
+                <div class="progressbar below"></div>
+                <div class="countdown clearfix">
+                        <span id="countdown"></span>
+                      <p class="countdown-message">The sale will be over once the timer hits zero</p>
+              </div>
+                <hr>
+
+                <script type="text/javascript" >
+          function getRandomizer(bottom, top) {
+              return Math.floor( Math.random() * ( 1 + top - bottom ) ) + bottom;
+          }
+
+          function setCookie(cname, cvalue, seconds) {
+              var d = new Date();
+              d.setTime(d.getTime() + (seconds * 1000));
+              var expires = "expires="+d.toUTCString();
+              document.cookie = cname + "=" + cvalue + "; " + expires;
+          }
+
+          function getCookie(cname) {
+              var name = cname + "=";
+              var ca = document.cookie.split(';');
+              for(var i=0; i<ca.length; i++) {
+                  var c = ca[i];
+                  while (c.charAt(0)==' ') c = c.substring(1);
+                  if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+              }
+              return "";
+          }
+
+
+          var product_timer_top_text_enable = true;
+          var product_progressbar_enable = true;
+          if(!progressbar_message) var progressbar_message = "ONLY [num] LEFT AT THIS PRICE";
+          var percentage=80;
+          var totalStock=50;
+          var prevStock = 0;
+
+          var rollDie = parseInt(getCookie("random_7963458115"));
+          if(!rollDie) rollDie = getRandomizer(5,30);
+
+          function showStock() {
+
+
+            if(rollDie >= 6) rollDie = rollDie-(0.0005*(rollDie-4)*(rollDie-4));
+
+            var intRollDie = parseInt(rollDie);
+
+            if (prevStock != intRollDie) {
+
+              setCookie("random_7963458115", intRollDie, 24*60*60);
+
+              var percentagetoshow = parseInt(intRollDie/totalStock*100);
+                var html = '';
+                if(product_timer_top_text_enable) html += '<p class="limited_edt"><span>'+ progressbar_message.replace('[num]', '<span class="num">'+intRollDie+'</span>') +'</span></p>';
+                if(product_progressbar_enable) html += '<div class="meter red"><div class="inside" style="width: '+percentagetoshow+'%"></div></div>';
+                $('.progressbar').html(html);
+                  if (prevStock > 0) {
+                    $('.progressbar span.num').addClass('flash');
+                    setTimeout(function () {
+                        $('.progressbar span.num').removeClass('flash');
+                    }, 1500);
+                  }
+                  prevStock = intRollDie;
+            }
+          }
+
+          showStock();
+          setInterval(showStock, 1000);
+
+
+
+            var time_left = parseInt("10800");
+            var target_date = parseInt(getCookie("timer_7963458115")) || new Date().getTime()/1000 + time_left;
+
+            setCookie("timer_7963458115", target_date, 24*60*60);
+
+          setInterval(function () {
+            var days, hours, minutes, seconds;
+
+            var current_time = new Date().getTime()/1000;
+            var seconds_left = target_date - current_time;
+            if(seconds_left <= 0){
+              target_date = new Date().getTime()/1000 + time_left;
+              seconds_left = target_date - current_time;
+
+
+                setCookie("timer_7963458115", target_date, 24*60*60);
+
+            }
+              days = parseInt(seconds_left / 86400);
+              seconds_left = seconds_left % 86400;
+              hours = parseInt(seconds_left / 3600);
+              seconds_left = seconds_left % 3600;
+
+              minutes = parseInt(seconds_left / 60);
+              seconds = parseInt(seconds_left % 60);
+
+              $('#countdown').html('<div class="counting">'+days+'<span>Days</span></div><div class="counting">'+hours+'<span>Hours</span></div><div class="counting">'+minutes+'<span>Minutes</span></div><div class="counting">'+seconds+'<span>Seconds</span></div>');
+            }, 1000);
+          </script>
+          <!------------------- End Countdown Timer ------------------->
+                
+
+                <div class="quantity">
+                  <label class="quant-cust">Quantity :</label>
+                  <div class="group-input">
+                    <div class="quantity-selector product_quantity cart_quantity">
+                      <a class="plus-minus" onclick="TextBox_AddToIntValue('quantity',-1)"><i class='iconsh cart_minus'></i></a>
+                      <input name="quantity" class="pop-quantity quantity-selector" id="quantity" type="text" value="1" min="1" size="3" />
+                      <a class="plus-minus" onclick="TextBox_AddToIntValue('quantity',+1)"><i class='iconsh cart_plus'></i></a>
+                    </div>
+                    <script>
+                      function TextBox_AddToIntValue(targetId,addToValue)
+                      {
+                          var input = document.getElementById(targetId);
+                          var textInt = parseInt(input.value);
+                          if(isNaN(textInt))
+                          {
+                              textInt = 0;
+                          }
+                        var total_quantity= textInt + addToValue;
+                       //input.value=total_quantity;
+
+                       if(total_quantity<=1){
+                            input.value=1;
+                        } else{
+                           input.value=total_quantity;
+                        }
+                      }
+                    </script> 
+                   
+                    <span class="bar"></span>
+                  </div>
+                  <button type="submit" class="btn btn-1 ripple add-to-cart" name="add" id="add" data-addtocart="{{'products.product.add_to_cart' | t}}" data-unavailable="{{'products.product.unavailable' | t}}" data-soldout="{{'products.product.sold_out' | t}}">{{'products.product.add_to_cart' | t}}</button>
+                  
+                </div>
+              </form>
+              
+              <!-- FLAME UNIT SOLD BY IMAD ELOUAJIB  -->
+              <script type="text/javascript">
+                $(document).ready(function() {
+                	$("#rand-unit").html(Math.floor(Math.random() * 502) + 900);
+                });
+              </script>
+              <div id="units-sold"><span id="flame-icon-units">🔥 </span> <span id="rand-unit"></span> units sold in the last 7days</div>
+              <!-- ./FLAME UNIT SOLD BY AIMAD ELOUAJIB  -->
+                
+              {% if settings.allow_wishlist %}
+              <div class="product-wishlist wishlist-{{product.id}}">
+                {% include 'wishlist-item' %}
+              </div>
+              {% endif %}
+
+              <div id="backorder" class="hidden">
+                <span id="selected-variant"></span> {{'products.product.backordered_html' | t}}
+              </div>
+
+              <div class="payment_logo">
+                <img src="{{'payment-logo.png' | asset_url}}" alt="" />
+              </div>
+              {% else %}
+              <meta itemprop="price" content="{{ product.price | money }}" />
+
+              <div id="product-actions" class="sold-out">
+                <div id="purchase">
+                  <p class="price">{{'products.product.sold_out' | t}}</p>      
+                </div>
+              </div>    
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-tabs col-sm-12">
+        {% include 'product-tab' %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-2">
+    {% include 'related-products' %}
+    {% include 'recently-viewed' %}
+  </div>
+</div>
+<script>window.products.id{{product.id}} = {{product | json}};</script>
+{% if settings.viewed_enable %}
+<script>Shopify.Products.recordRecentlyViewed();</script>
+{% endif %}

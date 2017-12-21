@@ -1,0 +1,108 @@
+<div class="gift-reggie-wishlist-button"></div>
+{% unless giftreggie_wishlist_button %}
+<script type='text/javascript' src='//gift-reggie.eshopadmin.com/static/js/compiled/giftreggie.js'></script>
+<script type='text/javascript'>
+(function ($) {
+	var wishlist = null;
+	var session = null;
+	var variant_ids = {};
+	{% if customer %}
+		GiftReggie.getSession({{ customer.id }}, "{{ customer.email }}", "{{ customer.metafields['gift-reggie']['shared-secret'] }}").done(function(data) {
+			session = data;
+			{% unless cart.attributes['wishlist_variant_ids'] %}
+				session.getWishlist().done(function(data) {
+					var variantIdList = [];
+					if (data['wishlist']) {
+						wishlist = data.wishlist;
+						for (var i = 0; i < data.wishlist.products.length; ++i) {
+							variantIdList.push(data.wishlist.products[i].variant_id);
+							variants_ids[data.wishlist.products[i].variant_id] = 1;
+						}
+						$.ajax({ url: '/cart/update.js', type: "POST", data: { "attributes[wishlist_variant_ids]": "[" + variantIdList.join(", ") + "]", "attributes[wishlist_id]": wishlist.id } });
+					}
+				});
+			{% else %}
+				var variantIdList = JSON.parse("{{ cart.attributes['wishlist_variant_ids'] }}");
+				for (var i = 0; i < variantIdList.length; ++i)
+					variant_ids[variantIdList[i]] = 1;
+				wishlist = { id: {{ cart.attributes['wishlist_id'] }} };
+			{% endunless %}
+		});
+	{% endif %}
+	var wishlistButtonTemplate = $("<input type='submit' class='btn add-wishlist' value='Add to Wishlist'>");
+	
+	var findIDForm = function(form) { return form.find("input[name='id'], select[name='id']").val(); }
+	var errorMessage = "Unable to integrate this snippet properly with your theme. Please remove or modify it to comply with your theme. For help modifying the snippet, please contact support@eshopadmin.com.";
+	
+	// This is the function you want to call whenever your form changes.
+	var updateButton = function(div) {
+		var form = div.parents("form");
+		var id = findIDForm(form);
+		var string = "Add to Wishlist";
+		if (variant_ids[id])
+			string = 'Remove from Wishlist';
+		div.find(".add-wishlist").val(string);
+	}
+	
+	var publishButton = function(div) {
+		var form = div.parents("form");
+		if (form.length > 0 && /cart/.test(form.attr('action'))) {
+			var wishlistButton = wishlistButtonTemplate.clone();
+			wishlistButton.appendTo(div).click(function() {
+				var id = findIDForm(form);
+				if (id) {
+					if (!session) {
+						window.location = "/apps/giftregistry/wishlist?id=" + id;
+						return false;
+					}
+					wishlistButton.val("...");
+					if (!wishlist) {
+						session.openWishlist().done(function(data) {
+							wishlist = data.wishlist;
+							session.addWishlist(id).done(function() {
+								variant_ids[id] = 1;
+								var variantIdList = Object.keys(variant_ids);
+								wishlistButton.val("Added!");
+								setTimeout(function() {	updateButton(div); }, 1000);
+								$.ajax({ url: '/cart/update.js', type: "POST", data: { "attributes[wishlist_variant_ids]": "[" + variantIdList.join(", ") + "]", "attributes[wishlist_id]": wishlist.id } });
+							});
+						});
+					} else {
+						if (!variant_ids[id]) {
+							session.addWishlist(id).done(function() {
+								variant_ids[id] = 1;
+								wishlistButton.val("Added!");
+								setTimeout(function() {	updateButton(div); }, 1000);
+								var variantIdList = Object.keys(variant_ids);
+								$.ajax({ url: '/cart/update.js', type: "POST", data: { "attributes[wishlist_variant_ids]": "[" + variantIdList.join(", ") + "]", "attributes[wishlist_id]": wishlist.id } });
+							});
+						} else {
+							session.removeWishlist(id).done(function() {
+								delete variant_ids[id];
+								wishlistButton.val("Removed!");
+								setTimeout(function() {	updateButton(div); }, 1000);
+								var variantIdList = Object.keys(variant_ids);
+								$.ajax({ url: '/cart/update.js', type: "POST", data: { "attributes[wishlist_variant_ids]": "[" + variantIdList.join(", ") + "]", "attributes[wishlist_id]": wishlist.id } });
+							});
+						}
+					}
+				}
+				else
+					alert(errorMessage);
+				return false;
+			});
+			updateButton(div);
+		}
+		else
+			alert(errorMessage);
+		form.find("select[name='id']").change(function() { updateButton(div); });
+		return false;
+	};
+	
+	$(document).ready(function() {
+		$(".gift-reggie-wishlist-button").each(function() { publishButton($(this)) });
+	});
+})(jQuery);
+</script>
+{% assign giftreggie_wishlist_button = 1 %}
+{% endunless %}

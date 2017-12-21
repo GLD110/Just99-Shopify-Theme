@@ -1,0 +1,53 @@
+{% if settings.popup_mailchimp_show %}
+{{ 'jquery.ajaxchimp.js' | asset_url | script_tag }}
+{{ 'jquery.cookie.js' | asset_url | script_tag }}
+<div id="newsletter-bar">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row">
+      <h3 class="sub-text">{{settings.popup_heading}}</h3>
+      <div class="sub-code">
+        {% if settings.popup_action != blank %}
+        <form id="mc-form" action="{{ settings.popup_action }}" method="post" name="mc-embedded-subscribe-form" target="_blank">
+          <div class="group-input">      
+            <input id="mc-email" type="email" name="EMAIL" autocomplete="off" required="required" />
+            <span class="bar"></span>
+            <label>{{ 'general.mailchimp_popup.enter_your_email' | t }}</label>
+            <button type="submit"><i class="zmdi"></i></button>
+          </div>
+          <label id="mc-response" for="mc-email"></label>
+        </form>
+        {% endif %}
+      </div>
+      <a href="javascript:;" class="sub-close"><i class="zmdi zmdi-close"></i></a>
+    </div>
+  </div>
+</div>
+<script>
+  jQuery(document).ready(function() {
+    {% if settings.popup_expires == '0' %}
+    jQuery.removeCookie('popup_cookie');
+    {% endif %}
+    
+    var $_popup_cookie = jQuery.cookie('popup_cookie');
+    if ($_popup_cookie == undefined){
+      setTimeout(function () {
+        jQuery('#newsletter-bar').slideDown();
+      }, 3000);
+      jQuery('#newsletter-bar .sub-close').click(function(e) {
+        jQuery('#newsletter-bar').slideUp();
+        jQuery.cookie('popup_cookie', 'yes', { path: '/', expires: {{settings.popup_expires}} });
+      });
+    }
+    
+    var $_form = jQuery('#mc-form');
+    var $_action = $_form.attr('action');
+    $_form.ajaxChimp({
+      url: $_action,
+      callback: function(resp){
+        $('#mc-response').show();
+      }
+    });
+  });
+</script>
+{% endif %}

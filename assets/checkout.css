@@ -1,0 +1,488 @@
+
+@import url(//fonts.googleapis.com/css?family=Lato:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=cyrillic-ext,greek-ext,latin,latin-ext,cyrillic,greek,vietnamese);
+
+
+@import url(//fonts.googleapis.com/css?family=Roboto:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=cyrillic-ext,greek-ext,latin,latin-ext,cyrillic,greek,vietnamese);
+
+
+
+
+
+
+
+
+
+/* CUSTOM LAYOUT */
+
+::selection{ 
+  background-color: #999999; 
+  color: #ffffff; 
+}
+::-moz-selection{
+  background-color: #999999; 
+  color: #ffffff; 
+}
+
+body{
+  padding-bottom: 0;
+  font-family: "Roboto", sans-serif;
+  background-color: #ffffff;
+}
+body,
+label,
+button,
+select, 
+textarea, 
+input[type="text"], 
+input[type="password"], 
+input[type="datetime"], 
+input[type="datetime-local"], 
+input[type="date"], 
+input[type="month"], 
+input[type="time"], 
+input[type="week"], 
+input[type="number"], 
+input[type="email"], 
+input[type="url"], 
+input[type="search"], 
+input[type="tel"], 
+input[type="color"], 
+.uneditable-input{
+  color: #212121;
+  font-size: 13px;
+}
+/*
+** Input settings
+*/
+/*
+** Input settings
+*/
+textarea, 
+input[type="text"], 
+input[type="password"], 
+input[type="datetime"], 
+input[type="datetime-local"], 
+input[type="date"], 
+input[type="month"], 
+input[type="time"], 
+input[type="week"], 
+input[type="number"], 
+input[type="email"], 
+input[type="url"], 
+input[type="search"], 
+input[type="tel"], 
+input[type="color"], 
+.uneditable-input{
+  -webkit-appearance: none;
+  color: #000000;
+  outline: none!important;
+  height: 28px;
+  padding: 0 12px!important;
+  line-height: 20px;
+  font-weight: normal;
+  vertical-align: top;
+  background-color: #ffffff;
+  background-image: none;
+  filter: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+  border: 1px solid #e5e5e5;
+  margin-bottom: 15px;
+}
+textarea:focus, 
+input[type="text"]:focus, 
+input[type="password"]:focus,
+input[type="datetime"]:focus, 
+input[type="datetime-local"]:focus, 
+input[type="date"]:focus, 
+input[type="month"]:focus, 
+input[type="time"]:focus,
+input[type="week"]:focus, 
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus, 
+input[type="search"]:focus, 
+input[type="tel"]:focus, 
+input[type="color"]:focus, 
+.uneditable-input:focus{
+  border-color: #999999;
+  outline: 0;
+  outline: thin dotted \9;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+select {
+  width: 244px!important;
+  background-color: #ffffff;
+  background-image: none !important;
+  filter: none !important;
+  border: 1px solid #e5e5e5;
+  outline: none;
+  height: 30px !important;
+  line-height: 20px;
+}
+select:focus{
+  outline-offset: -2px;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+  border-color: #999999;
+  outline: 0 !important;
+}
+table{
+  background-color: transparent;
+}
+input[type="checkbox"]{
+  vertical-align: middle;
+}
+
+#buttons input, 
+#cancel-purchase a,
+#discounts-body input[type="submit"],
+#create-account-btn{
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  -o-transition: all 0.2s ease-out;
+  -ms-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+}
+
+#buttons input, 
+#cancel-purchase a,
+#discounts-body input[type="submit"],
+#create-account-btn{
+  background-image: none;
+  filter: none;
+  padding: 7px 14px;
+  font-family: "Lato", sans-serif;
+  cursor: pointer;
+  outline: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-border-radius: 0!important;
+  -moz-border-radius: 0!important;
+  border-radius: 0!important;
+  -webkit-text-shadow: none;
+  -moz-text-shadow: none;
+  text-shadow: none;
+  
+  font-weight: normal;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+#cancel-purchase a,
+#create-account-btn{
+  background: #ffffff;
+  color: #212121;
+  border: 1px solid ;
+  font-size: 15px;
+  
+  *position: relative;
+  *bottom: 8px;
+}
+#cancel-purchase a:hover,
+#cancel-purchase a:focus,
+#cancel-purchase a:active,
+#create-account-btn:hover{
+  background: #f2f2f2;
+  color: #212121;
+  border: 1px solid ;
+  
+  outline: none;
+}
+
+
+#buttons input,
+#discounts-body input[type="submit"]{
+  background: #27b9e8;
+  color: #ffffff;
+  border: 1px solid ;
+  font-size: 15px;
+}
+#buttons input:hover,
+#buttons input:focus,
+#buttons input:active,
+#discounts-body input[type="submit"]:hover,
+#discounts-body input[type="submit"]:focus,
+#discounts-body input[type="submit"]:active{
+  background: #2980b9;
+  color: #ffffff;
+  border: 1px solid ;
+  
+  outline: none;
+}
+#discounts-body input[type="submit"]{
+  font-size: 12px;
+}
+
+
+#logo{
+  background: url(//cdn.shopify.com/s/files/1/2606/5474/t/2/assets/logo.png?16387506191901010947) no-repeat center;
+  height: 100px;
+  background-color: ;
+}
+
+
+#container,
+#container.slim{
+  width: 960px;
+  font-size: 100%;
+  margin-top: 0;
+}
+#header,
+#main,
+#footer,
+#container.slim #header,
+#container.slim #main,
+#container.slim #footer{
+  width: 100%;
+  background: transparent;
+  
+  padding-left: 0;
+  padding-right: 0;
+}
+#header{
+  padding-top: 0;
+}
+#header h1{
+  padding-left: 0;
+  font-weight: normal;
+  border: 0;
+  margin-bottom: 20px;
+}
+#footer{
+  background: !important;
+  color: ;
+  font-size: 13px;
+  padding: 25px 5px 40px 5px;
+}
+#content{
+  padding: 0;
+  min-height: 200px;
+}
+#billing-is-shipping label,
+#marketing-box label{
+  display: inline;
+}
+#overview{
+  background: transparent;
+  border-bottom: 0;
+  margin-bottom: 35px;
+  padding-left: 0;
+  padding-right: 0;
+}
+#products{
+  border-right: 0;
+}
+#thumbs div{
+  border: 0;
+  margin-right: 10px;
+}
+#thumbs img{
+  border: 1px solid #e0e0e0;
+  margin-right: 5px;
+  float: left;
+}
+#overview .hint,
+#thumbs span,
+#thumbs h3 span{
+  color: #009688;
+}
+#thumbs h3{
+  line-height: 14px;
+  font-size: 13px;
+  font-weight: normal;
+}
+#cost, #order-num{
+  font-family: "Lato", sans-serif;
+  color: #009688;
+  font-size: 30px;
+  line-height: 40px;
+  font-weight: bold;
+  text-shadow: none;
+}
+#addresses{
+  background: transparent;
+  margin-top: 68px;
+}
+#buttons{
+  background: transparent;
+  border: 0;
+  padding: 30px 0 10px;
+}
+.group{
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+#tagline{
+  border-bottom: 1px solid #e0e0e0;
+  padding: 20px 0;
+  text-transform: uppercase;
+}
+#tagline .title{
+  font-size: 24.5px;
+  line-height: 30px;
+}
+
+.address-notification{
+  background-color: #b9f6ca;
+  border-color: #b9f6ca;
+  color: #00c853;
+  padding: 10px 0;
+}
+.field-with-errors{
+  background-color: #ff5252;
+  border-color: #ff5252;
+  color: #ffffff;
+}
+.gright{
+  width: 49%;
+  padding-left: 0;
+  margin-left: 0;
+  float: right;
+}
+#email{
+  padding: 0;
+  background: transparent;
+  border: 0;
+  margin-bottom: 50px;
+}
+#email input{
+  font-size: 100%;
+}
+
+.slim #overview,
+#marketing-box,
+#payment-method,
+#payment,
+#products,
+#email,
+.gleft,
+.gright{
+  position: relative;
+  margin-bottom: 25px;
+}
+.slim #overview h2,
+#marketing-box h3,
+#payment-method h3,
+#payment h3,
+#products h2,
+#email label,
+.gleft h3, 
+.gright h3{
+  font-family: "Lato", sans-serif;
+  text-transform: uppercase;
+  line-height: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: #212121;
+  margin: 0 0 20px 0;
+  position: relative;
+  overflow: hidden;
+  border: 0;
+}
+.slim #overview h2:after,
+#marketing-box h3:after,
+#payment-method h3:after,
+#payment h3:after,
+#products h2:after,
+#email label:after,
+.gleft h3:after, 
+.gright h3:after{
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  z-index: 1;
+  margin-left: 10px;
+  border-bottom: 1px solid;
+  opacity: 0.2;
+}
+span.sign-in-message{
+  display: block;
+  margin-left: 0;
+  margin-top: 10px;
+}
+.multiple_address_selection td,
+.form td{
+  padding-left: 0;
+}
+.form td[colspan="2"]{
+  width: 100%!important;
+}
+.form td.lbl{
+  width: 100px;
+  vertical-align: middle;
+}
+.form td.lbl label{
+  margin-bottom: 15px;
+  line-height: 20px;
+}
+.form ul.inline li{
+  padding-left: 0;
+}
+.form ul.inline li,
+#billing_address_province_li{
+  width: 100%!important;
+}
+#shipping_address_province_li,
+#billing_address_province_li{
+  margin-top: 10px;
+}
+.form ul.inline li label,
+#billing_address_province_li label {
+  display: inline-block;
+  width: 129px;
+  padding-right: 2px;
+  line-height: 30px;
+  vertical-align: middle;
+  margin: 0;
+}
+input[type="text"],
+#email input{
+  width: 218px!important;
+  
+  line-height: 20px;
+}
+#payment-method{
+  margin-top: 55px;
+}
+#payment-methods li{
+  padding-left: 0;
+}
+img.credit-card{
+  margin-left: 0;
+}
+.field-with-errors .error-message{
+  font-weight: normal;
+}
+
+@-moz-document url-prefix() {
+  .form ul.inline li label,
+  #billing_address_province_li label {
+    width: 100px!important;
+  }
+}
+label{
+  display: block;
+  margin-bottom: 5px;
+  font-weight: normal;
+}
+#payment-methods li label{
+  display: inline-block;
+}
+#payment-methods input{
+  margin-top: 0;
+}
+#billing_address_selector,
+#shipping_address_selector{
+  width: 100%!important;
+}
