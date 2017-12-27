@@ -29,7 +29,9 @@
       {% for product in search.results %}
       <div class="animated product_item">
         {% if product.url contains 'products' %}
+        {% if product.type != 'Free' %}
         {% include 'product-item' %}
+        {% endif %}
         {% else %}
         {% include 'other-item' %}
         {% endif %}

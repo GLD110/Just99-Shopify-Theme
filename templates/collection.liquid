@@ -33,9 +33,11 @@
       {% if collection.products.size > 0 %}
       <div class="cat-grid">
         {% for product in collection.products %}
+        {% if product.type != 'Free' %}
         <div class="product_item animated">
           {% include 'product-item' %}
         </div>
+        {% endif %}
         {% endfor %}
       </div>
       {% else %}

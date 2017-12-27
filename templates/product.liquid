@@ -1,3 +1,4 @@
+{% if product.type != "Free" %}
 {% assign variant_tmp = product.selected_or_first_available_variant | default: product.variants.first %}
 <div id="col-main">
   <div class="col-md-10" itemscope itemtype="http://schema.org/Product">
@@ -233,7 +234,7 @@
                    
                     <span class="bar"></span>
                   </div>
-                  <button type="submit" class="btn btn-1 ripple add-to-cart" name="add" id="add" data-addtocart="{{'products.product.add_to_cart' | t}}" data-unavailable="{{'products.product.unavailable' | t}}" data-soldout="{{'products.product.sold_out' | t}}">{{'products.product.add_to_cart' | t}}</button>
+                  <button type="submit" class="btn btn-1 ripple add-to-cart" name="add" id="add" data-modal-id="popup" data-addtocart="{{'products.product.add_to_cart' | t}}" data-unavailable="{{'products.product.unavailable' | t}}" data-soldout="{{'products.product.sold_out' | t}}">{{'products.product.add_to_cart' | t}}</button>
                   
                 </div>
               </form>
@@ -288,4 +289,6 @@
 <script>window.products.id{{product.id}} = {{product | json}};</script>
 {% if settings.viewed_enable %}
 <script>Shopify.Products.recordRecentlyViewed();</script>
+{% endif %}
+{% include 'free-product' %}
 {% endif %}

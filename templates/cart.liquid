@@ -21,7 +21,7 @@
         </div>
         <div class="cart-items">
           {% for item in cart.items %}
-          <div class="cart-item">
+          <div class="cart-item" product-type="{{ item.product.type }}">
             <div class="inner">
               <div class="cart-left tip_holder_big">
                 <a href="{{item.url }}">
@@ -175,3 +175,41 @@
   </form>
   {% endif %}
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<script>
+  $(".cart-items .cart-item[product-type!='Free'] .quantput").change(function() {
+  	var count = $(".cart-items .cart-item[product-type!='Free'] .quantput[value!='1']").length;
+    var current_count = $(".cart-items .cart-item[product-type='Free'] .quantput");
+
+    if($(this).val() < 2)
+      count = count - 1;
+
+    if(current_count.val() > count) current_count.val(count);  
+    $("button[name='update']").click();
+    
+  });
+  
+  $(".cart-items .cart-item[product-type!='Free'] .plus-minus").click(function() {
+  	var count = $(".cart-items .cart-item[product-type!='Free'] .quantput[value!='1']").length;
+    var current_count = $(".cart-items .cart-item[product-type='Free'] .quantput");
+
+    if($(this).parent().find(".quantput").val() < 2)
+      count = count - 1;
+
+    if(current_count.val() > count) current_count.val(count);  
+    $("button[name='update']").click();
+    
+  });
+  
+  $(".cart-items .cart-item[product-type='Free'] .quantput").change(function() {
+  	var count = $(".cart-items .cart-item[product-type!='Free'] .quantput[value!='1']").length;
+    if($(this).val() > count) $(this).val(count); 
+  });
+  
+  $(".cart-items .cart-item[product-type='Free'] .plus-minus").click(function() {
+  	var count = $(".cart-items .cart-item[product-type!='Free'] .quantput[value!='1']").length;
+    if($(this).parent().find(".quantput").val() > count) $(this).parent().find(".quantput").val(count); 
+  });  
+</script>  
