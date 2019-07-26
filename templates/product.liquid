@@ -6,11 +6,11 @@
     <div id="product" class="row clearfix">
       <div class="product-gallery col-sm-6">
         <div class="inner">
-          <div class="thumbnails">
+          <!-- <div class="thumbnails">
             {% for image in product.images %}
             <a class="thumbnail" href="{{ image | product_img_url:'master' }}" data-src="{{image | product_img_url:'grande'}}"><img src="{{ image | product_img_url:'small' }}" alt="{{product.title}}" /></a>
             {% endfor %}
-          </div>
+          </div> -->
 
           {% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
           <div class="main">
@@ -98,7 +98,7 @@
                 <!--<div class="limited-edition-group">
                   {% include 'limited-edition' %}
                 </div>-->
-                
+
                 <!-------------------  Start Countdown Timer ------------------->
                 <div class="progressbar below"></div>
                 <div class="countdown clearfix">
@@ -202,7 +202,7 @@
             }, 1000);
           </script>
           <!------------------- End Countdown Timer ------------------->
-                
+
 
                 <div class="quantity">
                   <label class="quant-cust">Quantity :</label>
@@ -230,15 +230,15 @@
                            input.value=total_quantity;
                         }
                       }
-                    </script> 
-                   
+                    </script>
+
                     <span class="bar"></span>
                   </div>
                   <button type="submit" class="btn btn-1 ripple add-to-cart" name="add" id="add" data-modal-id="popup" data-addtocart="{{'products.product.add_to_cart' | t}}" data-unavailable="{{'products.product.unavailable' | t}}" data-soldout="{{'products.product.sold_out' | t}}">{{'products.product.add_to_cart' | t}}</button>
-                  
+
                 </div>
               </form>
-              
+
               <!-- FLAME UNIT SOLD BY IMAD ELOUAJIB  -->
               <script type="text/javascript">
                 $(document).ready(function() {
@@ -247,7 +247,7 @@
               </script>
               <div id="units-sold"><span id="flame-icon-units">🔥 </span> <span id="rand-unit"></span> units sold in the last 7days</div>
               <!-- ./FLAME UNIT SOLD BY AIMAD ELOUAJIB  -->
-                
+
               {% if settings.allow_wishlist %}
               <div class="product-wishlist wishlist-{{product.id}}">
                 {% include 'wishlist-item' %}
@@ -266,9 +266,9 @@
 
               <div id="product-actions" class="sold-out">
                 <div id="purchase">
-                  <p class="price">{{'products.product.sold_out' | t}}</p>      
+                  <p class="price">{{'products.product.sold_out' | t}}</p>
                 </div>
-              </div>    
+              </div>
               {% endif %}
             </div>
           </div>
