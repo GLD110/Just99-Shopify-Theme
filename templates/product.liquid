@@ -6,11 +6,11 @@
     <div id="product" class="row clearfix">
       <div class="product-gallery col-sm-6">
         <div class="inner">
-          <!-- <div class="thumbnails">
+          <div class="thumbnails">
             {% for image in product.images %}
             <a class="thumbnail" href="{{ image | product_img_url:'master' }}" data-src="{{image | product_img_url:'grande'}}"><img src="{{ image | product_img_url:'small' }}" alt="{{product.title}}" /></a>
             {% endfor %}
-          </div> -->
+          </div>
 
           {% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
           <div class="main">
